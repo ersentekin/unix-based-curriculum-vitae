@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<cv>
+	<item title="general">
+		<name>Ersen Tekin</name>
+		<job>Software Developer @ ESTER</job>
+		<about>Co_Founder of ZeepGame. Games, learning and listening!</about>
+	</item>
+	<item title="projects">
+		<project>quizabout.me  ||  Social Network Project</project>
+		<project>gossipanadolu.com  ||  Web-Based Application</project>
+		<project>Farty  ||  Mobile Game</project>
+	</item>
+	<item title="skills">
+		<skill>ActionScript  ||  LVL: 4/5</skill>
+		<skill>Corona SDK  ||  LVL: 5/5</skill>
+		<skill>Android  ||  LVL: 4/5</skill>
+		<skill>Rails Framework  ||  LVL: 2/5</skill>
+		<skill>Java  ||  LVL: 3/5</skill>
+		<skill>HTML/CSS  ||  LVL: 3/5</skill>
+	</item>
+	<item title="education">
+		<school>Osmangazi University | Electrical - Electronics Engineering</school>
+	</item>
+</cv>

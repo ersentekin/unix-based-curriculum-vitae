@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>JSON-RPC Demo for JQuery Terminal Emulator</title>
+    <meta name="author" content="Jakub Jankiewicz - jcubic&#64;onet.pl"/>
+    <meta name="Description" content="Demonstration for JQuery Terminal Emulator using call automaticly JSON-RPC service (in php) with authentication."/>
+    <link rel="sitemap" type="application/xml" title="Sitemap" href=""/>
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <script src="js/jquery-1.7.1.min.js"></script>
+    <script src="js/jquery.mousewheel-min.js"></script>
+    <script src="js/jquery.terminal-min.js"></script>
+    <link href="css/jquery.terminal.css" rel="stylesheet"/>
+    <link href="style.css" rel="stylesheet"/>
+  </head>
+<body>
+
+
+<div id="hello">
+</div>
+
+
+<script>
+
+jQuery(document).ready(function($) {
+  
+    var str="";
+    var description="";
+    var name="";
+    var job="";
+    var about="";
+    var lengthOfPorjects;
+    var projTitle = [];
+
+
+    var generalInfo = new Array();
+    var projectsInfo = new Array();
+    var skillsInfo = new Array();
+    var educationInfo = new Array();
+
+
+   $.get('cv.xml', function(d){
+        $(d).find('item').each(function(){
+
+            var $item = $(this); 
+            var title = $item.attr("title");
+            //var description = $book.find('description').text();
+            //var imageurl = $book.attr('imageurl');
+            if(title=="general")
+            {
+              generalInfo[0] = $item.find('name').text();
+              generalInfo[1] = $item.find('job').text();
+              generalInfo[2] = $item.find('about').text();
+
+            }
+            if (title=="projects") {
+              var j=0;
+              $item.children('project').each(function() {
+                  //alert($(this).text());
+                  projectsInfo[j] = $(this).text()
+                  j++;
+              });
+              
+            }
+            if(title == "skills")
+            {
+              var j=0;
+              $item.children('skill').each(function() {
+                  //alert($(this).text());
+                  skillsInfo[j] = $(this).text()
+                  j++;
+              });
+            }
+            if(title == "education")
+            {
+              educationInfo[0] = $item.find('school').text();
+            } 
+            
+        });
+        
+        
+    });
+    
+    
+        
+    var id = 1;
+    $('#hello').terminal(function(command, term) {
+
+        if (command == 'help') {
+            term.echo("\nAvailable commands are [[i;#62BB2A;#000]ls], [[i;#62BB2A;#000]cd <dir name>], [[i;#62BB2A;#000]cd ..]\n\n");
+
+            //var obj2 = parsed.name;
+            
+        } else if (command == 'ls'){
+            term.echo("\nDIRECTORIES :\n\n*  General\n*  Projects\n*  Skills\n*  Education\n\n");
+            
+        } else if (command == "cd general") {
+            term.push(function(command, term) {
+                if (command == 'cd ..') {
+                    term.pop();
+                    term.pop();
+                } else if(command == "ls"){
+                    term.echo("\n[[i;#FFF;#000]NAME :  ]"+"[[i;#62BB2A;#000]"+generalInfo[0]+"]\n"+"[[i;#FFF;#000]JOB  :  ]"+"[[i;#62BB2A;#000]"+generalInfo[1]+"]\n"+"[[i;#FFF;#000]ME   :  ]"+"[[i;#62BB2A;#000]"+generalInfo[2]+"]\n");
+                    term.echo("\n");
+                } else if(command == "help"){
+                    term.echo("\navailable commands are [[i;#62BB2A;#000]ls] and [[i;#62BB2A;#000]cd ..]\n");
+                }else {
+                    term.echo("\nunknown command " + command+"\n\n");
+                }
+            }, {
+                prompt: 'general>',
+                name: 'general'});
+        } else if (command == "cd projects") {
+            term.push(function(command, term) {
+                if (command == 'cd ..') {
+                    term.pop();
+                    term.pop();
+                } else if(command == "ls"){
+                    for (var i=0;i<projectsInfo.length;i++)
+                    { 
+                      term.echo("\n[[i;#FFF;#000]"+(i+1)+".  ]"+"[[i;#E6DB6F;#000]"+projectsInfo[i]+"]"); 
+                    }
+                    
+                    term.echo("\n");
+                } else if(command == "help"){
+                    term.echo("\navailable commands are [[i;#62BB2A;#000]ls] and [[i;#62BB2A;#000]cd ..]\n");
+                }else {
+                    term.echo("\nunknown command " + command+"\n\n");
+                }
+            }, {
+                prompt: 'projects>',
+                name: 'projects'});
+        } else if (command == "cd skills") {
+            term.push(function(command, term) {
+                if (command == 'cd ..') {
+                    term.pop();
+                    term.pop();
+                } else if(command == "ls"){
+                    for (var i=0;i<skillsInfo.length;i++)
+                    { 
+                      term.echo("\n[[i;#FFF;#000]"+(i+1)+".  ]"+"[[i;#66D2CA;#000]"+skillsInfo[i]+"]"); 
+                    }
+                    
+                    term.echo("\n");
+                } else if(command == "help"){
+                    term.echo("\navailable commands are [[i;#62BB2A;#000]ls] and [[i;#62BB2A;#000]cd ..]\n");
+                }else {
+                    term.echo("\nunknown command " + command+"\n\n");
+                }
+            }, {
+                prompt: 'skills>',
+                name: 'skills'});
+        } else if (command == "cd education") {
+            term.push(function(command, term) {
+                if (command == 'cd ..') {
+                    term.pop();
+                    term.pop();
+                } else if(command == "ls"){
+                    term.echo("\n\t[[i;#FFF;#000]"+educationInfo[0]+"]");
+                    term.echo("\n");
+                } else if(command == "help"){
+                    term.echo("\navailable commands are [[i;#62BB2A;#000]ls] and [[i;#62BB2A;#000]cd ..]\n");
+                }else {
+                    term.echo("\nunknown command " + command+"\n\n");
+                }
+            }, {
+                prompt: 'education>',
+                name: 'education'});
+        }  else if (command == "clear") {
+            term.clear();
+
+        } else {
+            term.echo("\nunknown command " + command+"\n\n");
+        }
+    }, {
+        greetings: "This is a Unix-based Curriculum Vitae of Ersen Tekin."+"\n\nSpecial thanks to jcubic for jQueryTerminal project.\n\nAlso this Unix-based CV is an open source project. \nYou can fork it on github.com/ersentekin \n\nUse 'help' command to see available commands.\n\n"
+    });
+});
+
+</script>
+
+
+</body>
